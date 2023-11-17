@@ -164,18 +164,19 @@ public class WebElementIntroTest {
         WebElement daredevil = driver.findElement(By.xpath("//option[@value='dd']"));
         WebElement robin = driver.findElement(By.xpath("//option[@value='rb']"));
 
-        ArrayList<WebElement> selectedHeroes = new ArrayList<>();
+        Select select = new Select(superheroes);
+        assertTrue(select.isMultiple());
+
         Select selectBatman = new Select(superheroes);
         selectBatman.selectByVisibleText("Batman");
-        selectedHeroes.add(batman);
 
         Select selectDaredevil = new Select(superheroes);
         selectDaredevil.selectByValue("dd");
-        selectedHeroes.add(daredevil);
 
         Select selectRobin = new Select(superheroes);
         selectRobin.selectByVisibleText("Robin");
-        selectedHeroes.add(robin);
+
+        ArrayList<WebElement> selectedHeroes = new ArrayList<>(select.getAllSelectedOptions());
 
         //Напишите приличные локаторы
         //Выберите Batman, Daredevil и Robin используя разные вызовы методов селект
