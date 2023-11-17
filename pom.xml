@@ -40,6 +40,16 @@
       <artifactId>logback-classic</artifactId>
       <version>1.4.11</version>
     </dependency>
+    <dependency>
+      <groupId>com.github.vladislavsevruk</groupId>
+      <artifactId>recursive-assertion-testng</artifactId>
+      <version>1.0.1</version>
+    </dependency>
+    <dependency>
+      <groupId>com.github.vladislavsevruk</groupId>
+      <artifactId>recursive-assertion-testng</artifactId>
+      <version>1.0.1</version>
+    </dependency>
   </dependencies>
 
   <build>

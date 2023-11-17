@@ -1,6 +1,7 @@
 package com.example;
 
 import io.github.bonigarcia.wdm.WebDriverManager;
+import org.apache.hc.core5.util.Asserts;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -12,6 +13,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.Select;
+import org.testng.asserts.SoftAssert;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -167,32 +169,28 @@ public class WebElementIntroTest {
         Select select = new Select(superheroes);
         assertTrue(select.isMultiple());
 
-        Select selectBatman = new Select(superheroes);
-        selectBatman.selectByVisibleText("Batman");
-
-        Select selectDaredevil = new Select(superheroes);
-        selectDaredevil.selectByValue("dd");
-
-        Select selectRobin = new Select(superheroes);
-        selectRobin.selectByVisibleText("Robin");
+        select.selectByVisibleText("Batman");
+        select.selectByValue("dd");
+        select.selectByVisibleText("Robin");
 
         ArrayList<WebElement> selectedHeroes = new ArrayList<>(select.getAllSelectedOptions());
 
         ArrayList<String> selectedHeroesNames = new ArrayList<>();
         select.getAllSelectedOptions().forEach(hero -> selectedHeroesNames.add(hero.getText()));
 
+        SoftAssert softAssert = new SoftAssert();
 
-        assertTrue(batman.isSelected());
-        assertTrue(daredevil.isSelected());
-        assertTrue(robin.isSelected());
+        softAssert.assertTrue(batman.isSelected());
+        softAssert.assertTrue(daredevil.isSelected());
+        softAssert.assertTrue(robin.isSelected());
 
-        assertTrue(selectedHeroes.contains(batman));
-        assertTrue(selectedHeroes.contains(daredevil));
-        assertTrue(selectedHeroes.contains(robin));
+        softAssert.assertTrue(selectedHeroes.contains(batman));
+        softAssert.assertTrue(selectedHeroes.contains(daredevil));
+        softAssert.assertTrue(selectedHeroes.contains(robin));
 
-        assertTrue(selectedHeroesNames.contains("Batman"));
-        assertTrue(selectedHeroesNames.contains("Daredevil"));
-        assertTrue(selectedHeroesNames.contains("Robin"));
+        softAssert.assertTrue(selectedHeroesNames.contains("Batman"));
+        softAssert.assertTrue(selectedHeroesNames.contains("Daredevil"));
+        softAssert.assertTrue(selectedHeroesNames.contains("Robin"));
     }
 
     @Test
