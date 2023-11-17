@@ -178,16 +178,21 @@ public class WebElementIntroTest {
 
         ArrayList<WebElement> selectedHeroes = new ArrayList<>(select.getAllSelectedOptions());
 
-        //Напишите приличные локаторы
-        //Выберите Batman, Daredevil и Robin используя разные вызовы методов селект
-        //Сделайте так, чтобы тест прошёл =)
+        ArrayList<String> selectedHeroesNames = new ArrayList<>();
+        select.getAllSelectedOptions().forEach(hero -> selectedHeroesNames.add(hero.getText()));
+
 
         assertTrue(batman.isSelected());
         assertTrue(daredevil.isSelected());
         assertTrue(robin.isSelected());
+
         assertTrue(selectedHeroes.contains(batman));
         assertTrue(selectedHeroes.contains(daredevil));
         assertTrue(selectedHeroes.contains(robin));
+
+        assertTrue(selectedHeroesNames.contains("Batman"));
+        assertTrue(selectedHeroesNames.contains("Daredevil"));
+        assertTrue(selectedHeroesNames.contains("Robin"));
     }
 
     @Test
