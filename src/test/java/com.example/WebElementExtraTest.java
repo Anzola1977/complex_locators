@@ -2,6 +2,7 @@ package com.example;
 
 import org.apache.hc.core5.util.Asserts;
 import org.junit.jupiter.api.Test;
+import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebElement;
@@ -60,11 +61,13 @@ public class WebElementExtraTest extends BaseTest {
     public void testRandomItemVisibility() { // 2
         driver.get("https://the-internet.herokuapp.com/disappearing_elements");
         List<WebElement> gallery = driver.findElements(By.xpath("//*[text()='Gallery']"));
-
-        if (gallery.isEmpty()) {
-
+        List<WebElement> listOfElements = driver.findElements(By.xpath("//*[@id=\"content\"]/div/ul/li"));
+        if (!(gallery.isEmpty())) {
+            System.out.println("Элемент Gallery есть на странице");
+            assertEquals(5, listOfElements.size());
+        } else {
+            System.out.println("Элемента Gallery на странице нет, всего элементов " + listOfElements.size());
         }
-
         // Проверить есть ли на странице и отображается ли элемент меню Gallery, вывести это в консоль
         // Если отображает то ассерт что элементов меню 5, если нет, то 4
     }
@@ -115,6 +118,8 @@ public class WebElementExtraTest extends BaseTest {
         WebElement dateInput = driver.findElement(By.xpath("//*[@id=\"GridFrow2fltDate\"]"));
         dateInput.sendKeys("03-19-2009");
 
+        assertEquals("593", dateInput.getAttribute("id"));
+
 
 
         //dateInput.sendKeys(Keys.ENTER);
@@ -135,8 +140,69 @@ public class WebElementExtraTest extends BaseTest {
     @Test
     public void testSumAndOrderMessageE2E() { // 5
         driver.get("https://www.saucedemo.com/");
+
+        WebElement userName = driver.findElement(By.xpath("//*[@id=\"user-name\"]"));
+        userName.sendKeys("standard_user");
+
+        WebElement password = driver.findElement(By.xpath("//*[@id=\"password\"]"));
+        password.sendKeys("secret_sauce");
+
+        WebElement loginButton = driver.findElement(By.xpath("//*[@id=\"login-button\"]"));
+        loginButton.click();
+
+        WebElement sortButton = driver.findElement(By.xpath("//*[@class=\"product_sort_container\"]"));
+        sortButton.click();
+
+        Select selectSort = new Select(sortButton);
+        selectSort.selectByValue("lohi");
+
+        WebElement addCheapestProduct = driver.findElement(By.xpath("//*[@id=\"add-to-cart-sauce-labs-onesie\"]"));
+        addCheapestProduct.click();
+
+        WebElement addExpensiveProduct = driver.findElement(By.xpath("//*[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]"));
+        addExpensiveProduct.click();
+
+        WebElement moveToCart = driver.findElement(By.xpath("//*[@class=\"shopping_cart_link\"]"));
+        moveToCart.click();
+
+        WebElement checkoutButton = driver.findElement(By.xpath("//*[@id=\"checkout\"]"));
+        checkoutButton.click();
+
+        WebElement firstName = driver.findElement(By.xpath("//*[@id=\"first-name\"]"));
+        firstName.sendKeys("Nick");
+
+        WebElement lastName = driver.findElement(By.xpath("//*[@id=\"last-name\"]"));
+        lastName.sendKeys("Stone");
+
+        WebElement postalCode = driver.findElement(By.xpath("//*[@id=\"postal-code\"]"));
+        postalCode.sendKeys("04663");
+
+        WebElement continueButton = driver.findElement(By.xpath("//*[@id=\"continue\"]"));
+        continueButton.click();
+
+        WebElement totalPrice = driver.findElement(By.xpath("//*[@class=\"summary_info_label summary_total_label\"]"));
+
+        assertEquals("Total: $62.62", totalPrice.getText());
+
+        WebElement finishButton = driver.findElement(By.xpath("//*[@id=\"finish\"]"));
+        finishButton.click();
+
+        WebElement firstMessage = driver.findElement(By.xpath("//*[@class=\"complete-header\"]"));
+        assertEquals("Thank you for your order!", firstMessage.getText());
+
+        WebElement secondMessage = driver.findElement(By.xpath("//*[@class=\"complete-text\"]"));
+        assertEquals("Your order has been dispatched, and will arrive just as fast as the pony can get there!", secondMessage.getText());
+
+        WebElement backButton = driver.findElement(By.xpath("//*[@id=\"back-to-products\"]"));
+        backButton.click();
+
+        List<WebElement> listOfItems = driver.findElements(By.xpath("//*[@class=\"inventory_item\"]"));
+        assertFalse("На главной странице должно отображаться " + listOfItems.size() + " элементов", listOfItems.isEmpty());
+
+        assertEquals("https://www.saucedemo.com/inventory.html", driver.getCurrentUrl());
+
         // Войдите в систему как standard_user, отсортируйте товары по цене от маленькой до большой
-        // Добавьте в корзину самый дешевый и второй самый дорогой товар, передите в корзину продолжите с заказом
+        // Добавьте в корзину самый дешевый и второй самый дорогой товар, перейдите в корзину продолжите с заказом
         // Введите данные -> далее; проверьте что общая сумма 41.02 -> Завершите заказ; проверьте что сообщения:
         // "Thank you for your order!" и "Your order has been dispatched, and will arrive just as fast as the pony can get there!"
         // Нажмите "Back Home" и каким хотите способом убедитесь, что вы на главной странице
