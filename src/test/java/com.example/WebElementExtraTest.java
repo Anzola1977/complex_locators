@@ -2,10 +2,8 @@ package com.example;
 
 import org.apache.hc.core5.util.Asserts;
 import org.junit.jupiter.api.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Action;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.Color;
 import org.openqa.selenium.support.ui.Select;
@@ -115,25 +113,28 @@ public class WebElementExtraTest extends BaseTest {
         WebElement dateButton = driver.findElement(By.xpath("//*[@id='GridFrow2fltDate']"));
         dateButton.click();
 
-        WebElement dateInput = driver.findElement(By.xpath("//*[@id=\"GridFrow2fltDate\"]"));
-        dateInput.sendKeys("03-19-2009");
+        WebElement yearInput = driver.findElement(By.xpath("//*[@id=\"GridFrow2fltDatecy-awed\"]"));
+        yearInput.click();
+        yearInput.findElement(By.xpath("//*[text()=\"2014\"]")).click();
 
-        assertEquals("593", dateInput.getAttribute("id"));
+        WebElement monthInput = driver.findElement(By.xpath("//*[@id=\"GridFrow2fltDatecm-awed\"]"));
+        monthInput.click();
+        monthInput.findElement(By.xpath("//*[text()=\"Апрель\"]")).click();
 
+        WebElement dayInput = driver.findElement(By.xpath("//*[text()=\"9\"]"));
+        dayInput.click();
 
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        //dateInput.sendKeys(Keys.ENTER);
+        List<WebElement> listOfStrings = driver.findElements(By.xpath("//tr[@class='awe-row']"));
+        assertEquals(1, listOfStrings.size());
+        assertTrue(listOfStrings.get(0).getAttribute("data-k").contains("1271"));
 
-//        Select selectDate = new Select(dateButton);
-//        assertTrue(selectDate.isMultiple());
-//        selectDate.selectByVisibleText("2009");
-//        selectDate.selectByVisibleText("Март");
-//        selectDate.selectByVisibleText("19");
-//
-
-        //assertEquals("");
-
-        // Введите в фильтры такие значения, чтобы осталась только пицца с id 563
+        // Введите в фильтры такие значения, чтобы осталась только пицца с id 1271
         // Проверьте, что отображается только одна строка и в этой строке ожидаемые значения (например id, person, chef)
     }
 
@@ -156,10 +157,10 @@ public class WebElementExtraTest extends BaseTest {
         Select selectSort = new Select(sortButton);
         selectSort.selectByValue("lohi");
 
-        WebElement addCheapestProduct = driver.findElement(By.xpath("//*[@id=\"add-to-cart-sauce-labs-onesie\"]"));
+        WebElement addCheapestProduct = driver.findElement(By.xpath("//div[@class=\"inventory_item\"][1]//button"));
         addCheapestProduct.click();
 
-        WebElement addExpensiveProduct = driver.findElement(By.xpath("//*[@id=\"add-to-cart-sauce-labs-fleece-jacket\"]"));
+        WebElement addExpensiveProduct = driver.findElement(By.xpath("//div[@class=\"inventory_item\"][last()-1]//button"));
         addExpensiveProduct.click();
 
         WebElement moveToCart = driver.findElement(By.xpath("//*[@class=\"shopping_cart_link\"]"));
@@ -181,8 +182,7 @@ public class WebElementExtraTest extends BaseTest {
         continueButton.click();
 
         WebElement totalPrice = driver.findElement(By.xpath("//*[@class=\"summary_info_label summary_total_label\"]"));
-
-        assertEquals("Total: $62.62", totalPrice.getText());
+        assertEquals("Total: $41.02", totalPrice.getText());
 
         WebElement finishButton = driver.findElement(By.xpath("//*[@id=\"finish\"]"));
         finishButton.click();
